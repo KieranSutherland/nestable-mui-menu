@@ -1,5 +1,5 @@
 import { NestableMenuProps } from './NestableMenu';
-import { MenuButton } from './MenuButton';
+import { NestableMenuButton } from './NestableMenuButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const groups: NestableMenuProps[ 'groups' ] = [
@@ -56,7 +56,7 @@ const groups: NestableMenuProps[ 'groups' ] = [
 export function App() {
     return (
         <>
-            <MenuButton
+            <NestableMenuButton
                 label="Settings"
                 groups={ groups }
                 buttonProps={ {

@@ -1547,6 +1547,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+nestable-mui-menu@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/nestable-mui-menu/-/nestable-mui-menu-0.3.0.tgz#a03b1755fc9909e9b0b3a2ee2d98177fa992accd"
+  integrity sha512-lL375ZshuWgB+n2zo++QNp7yqdP+pBO7XePRzEviAQnqYHqTJ/H8+S/E8y4Kj+HYAIHnTmLUV0KLpvDA4/tS9w==
+
 node-releases@^2.0.18:
   version "2.0.18"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.18.tgz#f010e8d35e2fe8d6b2944f03f70213ecedc4ca3f"

@@ -1,2 +1,2 @@
 export * from './NestableMenu';
-export * from './MenuButton';
+export * from './NestableMenuButton';
