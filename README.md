@@ -23,3 +23,7 @@ Feel free to push pull requests for [the project](https://github.com/KieranSuthe
 3. `yarn install && yarn dev` and in your terminal you will see the port vite has opened on `localhost`.
 4. Make your changes.
 5. Open a pull request.
+
+## :scroll: License
+
+This project is licensed under the terms of the [MIT license](/LICENSE).
