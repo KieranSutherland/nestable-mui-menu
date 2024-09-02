@@ -1,7 +1,11 @@
 {
     "name": "nestable-mui-menu",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "A mobile friendly nestable menu for MUI 5.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KieranSutherland/nestable-mui-menu"
+    },
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
