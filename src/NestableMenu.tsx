@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Menu as MuiMenu, MenuProps as MuiMenuProps, List, ListProps, MenuItemProps, TypographyProps
+    Menu as MuiMenu, MenuProps as MuiMenuProps, List, ListProps, MenuItemProps, TypographyProps, Divider
 } from '@mui/material';
 import { NestableMenuItem } from './components/NestableMenuItem';
 import { SubMenuTitle } from './components/SubMenuTitle';
@@ -10,7 +10,7 @@ interface MenuOptionWithAction {
      * Menu options to display nested within this parent menu option.
      * Providing an action is not supported if sub-menu options are provided.
      */
-    subMenuOptions?: never;
+    subMenuGroups?: never;
     /**
      * Function to call when the option is clicked.
      * Providing an sub-menu options is not supported if an action is provided.
@@ -18,12 +18,12 @@ interface MenuOptionWithAction {
     action?: () => any;
 }
 
-interface MenuOptionWithSubMenuOptions {
+interface MenuOptionWithsubMenuGroups {
     /**
      * Menu options are not supported if there is an action.
      * Providing an action is not supported if sub-menu options are provided.
      */
-    subMenuOptions?: MenuOption[];
+    subMenuGroups?: MenuOption[][];
     /**
      * Function to call when the option is clicked.
      * Providing an sub-menu options is not supported if an action is provided.
@@ -40,13 +40,13 @@ export type MenuOption = {
      * Secondary label for additional information.
      */
     subtext?: string;
-} & (MenuOptionWithAction | MenuOptionWithSubMenuOptions);
+} & (MenuOptionWithAction | MenuOptionWithsubMenuGroups);
 
 export interface NestableMenuProps extends Omit<MuiMenuProps, 'open'> {
     /**
-     * Options to display in the menu.
+     * Groups of options to display in the menu.
      */
-    options: MenuOption[];
+    groups: MenuOption[][];
     /**
      * Anchor of the element to pin the menu to.
      */
@@ -61,32 +61,44 @@ export interface NestableMenuProps extends Omit<MuiMenuProps, 'open'> {
     itemLabelProps?: TypographyProps;
 }
 
+interface CurrentMenuIndex {
+    groupIndex: number;
+    itemIndex: number;
+}
+
 export function NestableMenu(props: NestableMenuProps): JSX.Element {
-    const { options, anchorEl, setAnchorEl, listProps, menuItemProps,
+    const { groups, anchorEl, setAnchorEl, listProps, menuItemProps,
         itemLabelProps, subMenuTitleLabelProps, ...rest } = props;
 
-    const [ currentMenuIndexes, setCurrentMenuIndexes ] = useState<number[]>([]);
+    const [ currentMenuIndexes, setCurrentMenuIndexes ] = useState<CurrentMenuIndex[]>([]);
 
     const { currentMenu, subMenuTitle } = React.useMemo(() => {
-        let menu = options;
+        let menu = groups;
         let subMenuTitle;
-        for (const index of currentMenuIndexes) {
-            subMenuTitle = menu[ index ].label
-            menu = menu[ index ].subMenuOptions!;
+        for (const { groupIndex, itemIndex } of currentMenuIndexes) {
+            const currentItem = menu[ groupIndex ][ itemIndex ];
+            subMenuTitle = currentItem.label
+            menu = currentItem.subMenuGroups!;
         }
         return {
             currentMenu: menu,
             subMenuTitle
         };
-    }, [ currentMenuIndexes, options ]);
+    }, [ currentMenuIndexes, groups ]);
 
-    const handleClick = React.useCallback((option: MenuOption, index: number) => {
-        const { action, subMenuOptions } = option;
+    const handleClick = React.useCallback((option: MenuOption, groupIndex: number, itemIndex: number) => {
+        const { action, subMenuGroups } = option;
         if (action) {
             action();
             handleClose();
-        } else if (subMenuOptions) {
-            setCurrentMenuIndexes([ ...currentMenuIndexes, index ]);
+        } else if (subMenuGroups) {
+            setCurrentMenuIndexes([
+                ...currentMenuIndexes,
+                {
+                    groupIndex,
+                    itemIndex
+                }
+            ]);
         }
     }, [ currentMenuIndexes ]);
 
@@ -131,13 +143,22 @@ export function NestableMenu(props: NestableMenuProps): JSX.Element {
                     )
                 }
                 {
-                    currentMenu.map((option, index) => {
+                    currentMenu.map((options, groupIndex) => {
                         return (
-                            <NestableMenuItem
-                                option={ option }
-                                itemLabelProps={ itemLabelProps }
-                                onClick={ () => handleClick(option, index) }
-                            />
+                            <React.Fragment>
+                                {
+                                    options.map((option, itemIndex) => {
+                                        return (
+                                            <NestableMenuItem
+                                                option={ option }
+                                                itemLabelProps={ itemLabelProps }
+                                                onClick={ () => handleClick(option, groupIndex, itemIndex) }
+                                            />
+                                        )
+                                    })
+                                }
+                                { groupIndex !== currentMenu.length - 1 && <Divider orientation="horizontal" flexItem /> }
+                            </React.Fragment>
                         )
                     })
                 }

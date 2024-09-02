@@ -41,7 +41,7 @@ export function NestableMenuItem(props: NestableMenuItemProps) {
                     { option.subtext }
                 </Typography>
             </Box>
-            { option.subMenuOptions && <ChevronRightIcon /> }
+            { option.subMenuGroups && <ChevronRightIcon /> }
         </Box>
     )
 }

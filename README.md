@@ -2,6 +2,10 @@
 
 This is a mobile friendly MUI (v5) menu with infinitely nestable sub-menus.
 
+Changes the content of the menu based on which sub-menu is currently active, keeping the menu in a compact form allowing for easy mobile integration.
+
+![](demo.gif)
+
 ## :information_desk_person: Exports
 
 The following components (and corresponding interfaces) are exported:

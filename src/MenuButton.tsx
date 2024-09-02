@@ -12,7 +12,7 @@ export interface MenuButtonProps extends Omit<NestableMenuProps, 'anchorEl' | 's
 }
 
 export function MenuButton(props: MenuButtonProps) {
-    const { label, buttonProps, options } = props;
+    const { label, buttonProps, groups } = props;
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
 
     const handleButtonClick = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
@@ -31,7 +31,7 @@ export function MenuButton(props: MenuButtonProps) {
             <NestableMenu
                 anchorEl={ anchorEl }
                 setAnchorEl={ setAnchorEl }
-                options={ options }
+                groups={ groups }
             />
         </>
     )
