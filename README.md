@@ -6,9 +6,9 @@ This is a mobile friendly MUI (v5) menu with infinitely nestable sub-menus.
 
 The following components (and corresponding interfaces) are exported:
 
-- `Menu` - The raw menu component. This will require the anchor element to be managed externally.
+- `NestableMenu` - The raw menu component. This will require the anchor element to be managed externally.
 
-- `MenuButton` - A MUI button wrapping the Menu component, handling the anchoring internally.
+- `NestableMenuButton` - A MUI button wrapping the Menu component, handling the anchoring internally.
 
 ## :computer: Contributing
 

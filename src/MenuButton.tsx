@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Menu, MenuProps } from './Menu';
+import { NestableMenu, NestableMenuProps } from './NestableMenu';
 import { Button, ButtonProps } from '@mui/material';
 import React from 'react';
 
-export interface MenuButtonProps extends Omit<MenuProps, 'anchorEl' | 'setAnchorEl'> {
+export interface MenuButtonProps extends Omit<NestableMenuProps, 'anchorEl' | 'setAnchorEl'> {
     /**
      * Label for the button.
      */
@@ -28,7 +28,7 @@ export function MenuButton(props: MenuButtonProps) {
             >
                 { label }
             </Button>
-            <Menu
+            <NestableMenu
                 anchorEl={ anchorEl }
                 setAnchorEl={ setAnchorEl }
                 options={ options }

@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
 import {
-    Menu as MuiMenu, MenuProps as MuiMenuProps, MenuItem, List, Divider, Typography,
-    Box, IconButton, ListProps, MenuItemProps, TypographyProps
+    Menu as MuiMenu, MenuProps as MuiMenuProps, List, ListProps, MenuItemProps, TypographyProps
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { NestableMenuItem } from './components/NestableMenuItem';
+import { SubMenuTitle } from './components/SubMenuTitle';
 
-export interface MenuOption {
+interface MenuOptionWithAction {
+    /**
+     * Menu options to display nested within this parent menu option.
+     * Providing an action is not supported if sub-menu options are provided.
+     */
+    subMenuOptions?: never;
+    /**
+     * Function to call when the option is clicked.
+     * Providing an sub-menu options is not supported if an action is provided.
+     */
+    action?: () => any;
+}
+
+interface MenuOptionWithSubMenuOptions {
+    /**
+     * Menu options are not supported if there is an action.
+     * Providing an action is not supported if sub-menu options are provided.
+     */
+    subMenuOptions?: MenuOption[];
+    /**
+     * Function to call when the option is clicked.
+     * Providing an sub-menu options is not supported if an action is provided.
+     */
+    action?: never;
+}
+
+export type MenuOption = {
     /**
      * Label for the menu item.
      */
@@ -15,21 +40,13 @@ export interface MenuOption {
      * Secondary label for additional information.
      */
     subtext?: string;
-    /**
-     * Menu options to display nested within this parent menu option.
-     */
-    subMenuOptions?: MenuOption[];
-    /**
-     * Function to call when the option is clicked.
-     */
-    action?: () => any;
-}
+} & (MenuOptionWithAction | MenuOptionWithSubMenuOptions);
 
-export interface MenuProps extends Omit<MuiMenuProps, 'open'> {
+export interface NestableMenuProps extends Omit<MuiMenuProps, 'open'> {
     /**
      * Options to display in the menu.
      */
-    options: MenuOption[]; // TODO - Change to groups to allow dividers between options.
+    options: MenuOption[];
     /**
      * Anchor of the element to pin the menu to.
      */
@@ -44,7 +61,7 @@ export interface MenuProps extends Omit<MuiMenuProps, 'open'> {
     itemLabelProps?: TypographyProps;
 }
 
-export function Menu(props: MenuProps): JSX.Element {
+export function NestableMenu(props: NestableMenuProps): JSX.Element {
     const { options, anchorEl, setAnchorEl, listProps, menuItemProps,
         itemLabelProps, subMenuTitleLabelProps, ...rest } = props;
 
@@ -67,8 +84,8 @@ export function Menu(props: MenuProps): JSX.Element {
         const { action, subMenuOptions } = option;
         if (action) {
             action();
-        }
-        if (subMenuOptions) {
+            handleClose();
+        } else if (subMenuOptions) {
             setCurrentMenuIndexes([ ...currentMenuIndexes, index ]);
         }
     }, [ currentMenuIndexes ]);
@@ -106,38 +123,21 @@ export function Menu(props: MenuProps): JSX.Element {
             <List { ...listProps }>
                 {
                     typeof subMenuTitle !== 'undefined' && (
-                        <Box display="flex" flexDirection="column" gap={ 1 } marginBottom={ 1 } paddingX={ 1 }>
-                            <Box display="flex" flexDirection="row" alignItems="center" gap={ 1 } marginRight={ 1 }>
-                                <IconButton aria-label="back" onClick={ handleBack }>
-                                    <ArrowBackIcon />
-                                </IconButton>
-                                <Typography fontSize="1.1rem" { ...subMenuTitleLabelProps }>
-                                    { subMenuTitle }
-                                </Typography>
-                            </Box>
-                            <Divider orientation="horizontal" flexItem />
-                        </Box>
+                        <SubMenuTitle
+                            handleBack={ handleBack }
+                            subMenuTitle={ subMenuTitle }
+                            subMenuTitleLabelProps={ subMenuTitleLabelProps }
+                        />
                     )
                 }
                 {
                     currentMenu.map((option, index) => {
                         return (
-                            <Box
-                                display="flex"
-                                flexDirection="row"
-                                alignSelf="flex-start"
-                                justifyContent="space-between"
-                                gap={ 1 }
-                                component={ MenuItem }
+                            <NestableMenuItem
+                                option={ option }
+                                itemLabelProps={ itemLabelProps }
                                 onClick={ () => handleClick(option, index) }
-                                key={ option.label }
-                                { ...menuItemProps }
-                            >
-                                <Typography { ...itemLabelProps }>
-                                    { option.label }
-                                </Typography>
-                                { option.subMenuOptions && <ChevronRightIcon /> }
-                            </Box>
+                            />
                         )
                     })
                 }
