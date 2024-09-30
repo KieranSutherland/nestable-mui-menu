@@ -1,6 +1,6 @@
 {
     "name": "nestable-mui-menu",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "author": "Kieran Sutherland",
     "description": "A mobile friendly nestable menu for MUI 5.",
     "license": "MIT",
@@ -17,12 +17,14 @@
         "lint": "eslint .",
         "preview": "vite preview"
     },
+    "dependencies": {
+        "@mui/icons-material": "^5.0.0",
+        "@mui/material": "^5.0.0"
+    },
     "peerDependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
         "@fontsource/roboto": "^5.0.14",
-        "@mui/icons-material": "^5.0.0",
-        "@mui/material": "^5.0.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1"
     },
@@ -45,8 +47,5 @@
         "typescript": "^5.5.3",
         "typescript-eslint": "^8.0.1",
         "vite": "5.2.0"
-    },
-    "dependencies": {
-        "nestable-mui-menu": "^0.3.0"
     }
 }
